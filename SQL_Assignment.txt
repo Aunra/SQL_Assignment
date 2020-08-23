@@ -1,0 +1,115 @@
+Round 1 – ‘Kid’ mode
+Write DML queries for the following questions
+1)Display unique Jobs from EMP table
+SQL Query:select Distinct(Job) from Emp;
+2)List the employees in the ascending order of their salaries
+SQL Query:select ename,sal from emp order by sal asc;
+3)List the details of the employees in ascending order of the dept no and descending of Jobs
+SQL Query:select ename,deptno,job from emp order by deptno asc,job desc;
+4)Display all the unique job groups in the descending order
+SQL Query:select  Distinct(job) from emp order by job desc;
+5)Display all the employees who are managers
+SQL Query:select Ename from emp where job='MANAGER';
+6)List the employees who joined before 1981
+SQL Query:select ename from emp where extract (YEAR from to_date(Hiredate,'DD-MM-YYYY'))<1981;
+7)List the Empno, Ename, Sal, daily sal of all employees in the ascending order of annual sal
+SQL Query:select empno,ename,sal,Round((sal/31)) as daily_sal from emp  order by  (sal*12) asc;
+8)Display the Empno, Ename, job, Hiredate, Exp of all Mgrs
+SQL Query:select empno,ename,job,Hiredate,Round((Sysdate-Hiredate)/365) as exp from emp where job ='MANAGER';
+9)List the Empno, Ename, Sal, experience of all employees working for Mgr=7369
+SQL Query: select empno,ename,sal,Round((Sysdate-Hiredate)/365) as exp from emp where mgr='7369';
+10)Display all the details of the employees whose Comm. Is more than their Sal
+SQL Query:select ename from emp where comm>sal;
+11)List the employees in the asc order of Designations of those joined after the second half of 1981
+SQL Query:select ename,hiredate from emp where hiredate >'31-12-1981';
+12)List the employees along with their experience and daily salary is more than Rs.100
+SQL Query:select ename,Round((Sysdate-Hiredate)/365) as exp,Round(sal/31) as daily_sal from emp where (sal/31>100);
+13)List the employees who are either ‘CLERK’ or ‘ANALYST’ in the Desc order
+
+SQL Query:select ename from emp where job='CLERK' or job='ANALYST' order by job desc;
+14)List the employees who joined on 1-MAY-81,3-DEC-81,17-DEC-81,19-JAN-80 in asc order of seniority
+SQL Query:select ename,hiredate from emp where hiredate in ('1-MAY-81','3-DEC-81','17-DEC-81','19-JAN-80' ) order by hiredate asc;
+15)List the emp who are working for the Deptno 10 or 20
+SQL Query:select ename from emp where deptno =10 or Deptno=20;
+16)List the employees who are joined in the year ‘81
+SQL Query:select ename from emp where to_char(to_date(Hiredate,'DD-MM-YYYY'),'YY')=81;
+17)List the employees who are joined in the month of Aug 1980
+SQL Query:select ename from emp where  to_char(hiredate,'MON')='AUG' and to_char(hiredate,'YYYY')='1980';
+18)List the Enames those are having five characters in their Names 
+SQL Query:select ename from emp where length(ename)=5;
+19)List the Enames those are starting with ‘S’ and with five characters
+SQL Query:select ename from emp where length(ename)=5 and Instr(ename,'S',1)=1;
+20)List the employees those are having four chars and third character must be ‘r’
+SQL Query:select ename from emp where length(ename)=4  and Instr(ename,'R',1)=3;
+21)List the names of those employees whose employee numbers are 7369, 7521, 7839, 7934, 7788.
+SQL Query:select ename from emp where empno in (7369, 7521, 7839, 7934, 7788);
+22)List those employees who do not belonging to department 30, 40, or 10.
+SQL Query:select ename from emp where deptno not in (30, 40,10)
+23)List those employee names who have joined between 30 June and 31 Dec ‘81.
+SQL Query:select ename, hiredate from emp where hiredate between '30-Jun-81' and '31-Dec-81';
+24)List the different designations available in the company
+SQL Query:select distinct(job) from emp ;
+25)List those employees name that are not eligible for commission
+SQL Query:select ename from emp where comm is null;
+26)List the name of the employee and designation of the employee who does not report to anybody
+SQL Query:select ename,job from emp where mgr is null;
+27)List the employees who are eligible for commission
+SQL Query:select ename from emp where comm is not null;
+28List names of employees if the names have “i” as the second character
+SQL Query:select ename from emp where Instr(ename,'I',1)=2;
+29)Display the names of all employees with their salary and commission earned. Employees with a null commission field should have 0 in the commission column
+SQL Query:select ename,sal,nvl(comm,0) from emp;
+
+Round 2 – Group by clause
+1)List the count and average salary for employees in department 20.
+SQL Query:select count(*) as count,avg(sal) as avg_sal from emp where deptno=20;
+
+2)List names of employees who are older than 30 years in the company. 
+SQL Query:select ename from emp where ((sysdate-hiredate)/365) >30 ;
+
+3)List the employee name,hire date in the descending order of the hire date.
+SQL Query:select ename,hiredate from emp   order by hiredate desc;
+
+4)List employee name, salary, PF, HRA, DA and gross; order the results in the ascending order of gross. HRA is 50% of the salary and DA is 30% of the salary.
+SQL Query:select ename,sal as basic_sal,(Sal*(12/100)) as PF,(Sal*(50/100)) as HRA ,(Sal*(30/100)) as DA , sum((Sal*(50/100))+(Sal*(30/100))+Sal-(Sal*(12/100))) as gross from emp group by sal,ename order by gross ;
+
+5)List the department numbers and number of employees in each department.
+SQl Query: select deptno,count(ename)as num_of_emp from emp group by deptno;
+
+Round 3 – SUBQUERIES
+Write queries for the following questions
+1)List employees whose job is same as that of Smith 
+      SQL Query:select ename,job from emp where job = (select job from emp where ename='SMITH');
+2)List employees who have joined after Adam
+
+SQL Query:select ename from emp where hiredate> (select hiredate from emp where ename='ADAM');
+
+3)List employees who salary us greater than Scott’s salary 
+SQL Query:select ename from emp where sal >(Select sal from emp where ename='SCOTT');
+
+4)List employees getting the max salary
+SQL Query:select ename from emp where sal =(Select max(sal) from emp ); 
+
+5)List employees show salary is > the max salary in deptno 30
+SQL Query:select ename from emp where sal>(select max(sal) from emp where deptno =30);
+
+Round 4 – Joins (Mortal mode)
+1)List employee name, department number and their corresponding department name. 
+SQL Query:select e.ename,e.deptno,dname from emp e inner join dept d on e.deptno=d.deptno;
+
+2)List employee name and their manager name 
+SQL Query:select e.ename as emp ,m.ename as mgr from emp e, emp m where e.mgr=m.empno;
+
+3)List employees who work in Research department 
+SQL Query:select e.ename,d.dname from emp e inner join dept d on e.deptno=d.deptno where d.dname='RESEARCH';
+
+4)List all rows from EMP table and only the matching rows from DEPT table. 
+SQL Query:select * from emp e left outer join dept d on e.deptno=d.deptno;
+
+5)List all rows from EMP table and only the matching rows from DEPT table. 
+SQL Query: select * from emp e left outer join dept d on e.deptno=d.deptno;
+ 
+
+
+
+
